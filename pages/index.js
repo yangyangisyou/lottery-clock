@@ -52,7 +52,7 @@ const Home = () => {
     [setIsOpenModal]
   );
   useEffect(() => {
-    if (drawedMember) {
+    if (drawedMember?.id > 0) {
       setIsOpenModal(true);
     }
   }, [drawedMember]);
