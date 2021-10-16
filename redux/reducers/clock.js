@@ -47,7 +47,11 @@ const initialState = {
       avatar: "/user.png",
     },
   ],
-  drawedMember: null,
+  drawedMember: {
+    id: 0,
+    name: "default",
+    avatar: "/user.png",
+  },
 };
 
 const reducer = (state = initialState, action) => {
