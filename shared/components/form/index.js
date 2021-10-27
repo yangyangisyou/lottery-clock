@@ -41,10 +41,11 @@ const Form = ({ seconds, onSettingTimes }) => {
     (event) => setCurrentMinute(event.target.value),
     [setCurrentMinute]
   );
-  const onSubmit = useCallback(
-    () => onSettingTimes(currentMinute * 60),
-    [currentMinute]
-  );
+  const onSubmit = useCallback(() => {
+    if (currentMinute > 0) {
+      onSettingTimes(currentMinute * 60);
+    }
+  }, [currentMinute]);
   const remainMinute = useMemo(
     () =>
       Math.floor(seconds / 60).toLocaleString("en-US", {
