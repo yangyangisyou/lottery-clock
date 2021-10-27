@@ -1,6 +1,8 @@
 import { Provider } from "react-redux";
 import storeFactory from "../utils/storeFactory";
 import GlobalStyle from "../shared/styles/global";
+import { Toaster } from "react-hot-toast";
+
 const store = storeFactory();
 
 function MyApp({ Component, pageProps }) {
@@ -8,6 +10,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <GlobalStyle>
         <Component {...pageProps} />
+        <Toaster />
       </GlobalStyle>
     </Provider>
   );

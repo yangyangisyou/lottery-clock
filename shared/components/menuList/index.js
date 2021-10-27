@@ -1,8 +1,13 @@
+import { useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 
 const MenuWrapper = styled.div`
   margin: 20px;
   width: 40vw;
+  .header {
+    font-weight: 500;
+    font-size: 24px;
+  }
   @media (max-width: 576px) {
     width: 80vw;
   }
@@ -16,6 +21,7 @@ const ListWrapper = styled.ul`
   overflow-x: hidden;
   overflow-y: scroll;
   height: 200px;
+  padding: 10px;
   @media (max-width: 576px) {
     margin: 20px auto;
   }
@@ -23,7 +29,7 @@ const ListWrapper = styled.ul`
 
 const CardWrapper = styled.li`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 10px auto;
   .avatar {
@@ -34,18 +40,33 @@ const CardWrapper = styled.li`
   }
 `;
 
-const MenuList = ({ list }) => {
+const MenuList = ({ list, onLoadUsers, isLoadingUserList }) => {
+  useEffect(() => {
+    onLoadUsers();
+  }, []);
+
+  const List = useMemo(() => {
+    if (isLoadingUserList) {
+      return <>loading</>;
+    } else {
+      return (
+        <>
+          {list.length > 0 &&
+            list.map(({ name, id }) => (
+              <CardWrapper key={id}>
+                <img className="avatar" src="/user.png" alt="avatar" />
+                <p className="name">{name}</p>
+              </CardWrapper>
+            ))}
+        </>
+      );
+    }
+  }, []);
+
   return (
     <MenuWrapper>
       <p className="header">參與者抽獎名單</p>
-      <ListWrapper>
-        {list.map(({ name, id, avatar }) => (
-          <CardWrapper key={id}>
-            <img className="avatar" src={avatar} alt="avatar" />
-            <p className="name">{name}</p>
-          </CardWrapper>
-        ))}
-      </ListWrapper>
+      <ListWrapper>{List}</ListWrapper>
     </MenuWrapper>
   );
 };

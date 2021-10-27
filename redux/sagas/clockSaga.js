@@ -7,7 +7,7 @@ import {
   take,
   cancel,
 } from "redux-saga/effects";
-import { updateTimes, drawMember } from "../actions/clock";
+import { updateTimes, drawMember, updateUsers } from "../actions/clock";
 import { countdown } from "../../utils/clock";
 
 function* countdownTimes(seconds) {
@@ -31,6 +31,19 @@ function* countdownTimes(seconds) {
   }
 }
 
+function* loadUsers() {
+  try {
+    const response = yield call(
+      fetch,
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    const users = yield response.json();
+    yield put(updateUsers(users));
+  } catch (error) {
+    yield put(updateUsersFailed(error));
+  }
+}
+
 function* setTimes(action) {
   const { seconds } = action.payload;
   const countDownTask = yield fork(countdownTimes, seconds);
@@ -41,6 +54,7 @@ function* setTimes(action) {
 
 function* clockSaga() {
   yield takeEvery("SET_TIMES", setTimes);
+  yield takeEvery("LOAD_USERS", loadUsers);
 }
 
 export default clockSaga;

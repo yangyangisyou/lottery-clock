@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { setTimes } from "../redux/actions/clock";
+import { setTimes, loadUsers } from "../redux/actions/clock";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState, useMemo, useEffect } from "react";
 import Form from "../shared/components/form";
@@ -19,9 +19,13 @@ const PageWrapper = styled.main`
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { userList, seconds, drawedMember } = useSelector(
+  const { userList, seconds, drawedMember, isLoadingUserList } = useSelector(
     (store) => store.clock
   );
+
+  const onLoadUsers = useCallback(() => {
+    dispatch(loadUsers());
+  }, [dispatch, loadUsers]);
 
   const onSettingTimes = useCallback(
     (newSeconds) => {
@@ -31,7 +35,13 @@ const Home = () => {
   );
 
   const Menu = useMemo(() => {
-    return <MenuList list={userList} />;
+    return (
+      <MenuList
+        list={userList}
+        onLoadUsers={onLoadUsers}
+        isLoadingUserList={isLoadingUserList}
+      />
+    );
   }, [userList]);
 
   return (

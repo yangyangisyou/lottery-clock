@@ -1,52 +1,9 @@
+import toast from "react-hot-toast";
+
 const initialState = {
   seconds: 0,
-  userList: [
-    {
-      id: 1,
-      name: "user1",
-      avatar: "/user.png",
-    },
-    {
-      id: 2,
-      name: "user2",
-      avatar: "/user.png",
-    },
-    {
-      id: 3,
-      name: "user3",
-      avatar: "/user.png",
-    },
-    {
-      id: 4,
-      name: "user4",
-      avatar: "/user.png",
-    },
-    {
-      id: 5,
-      name: "user5",
-      avatar: "/user.png",
-    },
-    {
-      id: 6,
-      name: "user6",
-      avatar: "/user.png",
-    },
-    {
-      id: 7,
-      name: "user7",
-      avatar: "/user.png",
-    },
-    {
-      id: 8,
-      name: "user8",
-      avatar: "/user.png",
-    },
-    {
-      id: 9,
-      name: "user9",
-      avatar: "/user.png",
-    },
-  ],
+  userList: [],
+  isLoadingUserList: true,
   drawedMember: {
     id: 0,
     name: "default",
@@ -61,6 +18,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         seconds: seconds,
+      };
+    }
+    case "UPDATE_USERS": {
+      const { users } = action.payload;
+      return {
+        ...state,
+        userList: users,
+        isLoadingUserList: false,
+      };
+    }
+    case "UPDATE_USERS_FAILED": {
+      const { error } = action.payload;
+      toast.error(error);
+      return {
+        ...state,
+        isLoadingUserList: false,
       };
     }
     case "DRAW_MEMBER": {

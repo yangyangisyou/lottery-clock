@@ -24,6 +24,9 @@ const SubmitButton = styled.button`
   color: white;
   border-radius: 10px;
   cursor: pointer;
+  &[disabled] {
+    background-color: gray;
+  }
 `;
 
 const InputField = styled.input`
@@ -60,6 +63,10 @@ const Form = ({ seconds, onSettingTimes }) => {
       }),
     [seconds]
   );
+  const disabledSubmit = useMemo(
+    () => currentMinute < 0 || currentMinute % 1 !== 0,
+    [currentMinute]
+  );
   return (
     <ContentWrapper>
       <p className="header">抽獎時間</p>
@@ -76,7 +83,9 @@ const Form = ({ seconds, onSettingTimes }) => {
         >
           分鐘
         </span>
-        <SubmitButton onClick={onSubmit}>設定</SubmitButton>
+        <SubmitButton onClick={onSubmit} disabled={disabledSubmit}>
+          設定
+        </SubmitButton>
       </FlexWrapper>
       <TimerWrapper>
         <span>{remainMinute}</span>:<span>{remainSecond}</span>
