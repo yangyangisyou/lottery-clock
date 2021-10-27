@@ -1,3 +1,4 @@
+import { useCallback, useState, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
 
 const ModalWrapper = styled.div`
@@ -26,12 +27,10 @@ const ModalCardWrapper = styled.div`
   background: white;
   border: 1px black solid;
   border-radius: 20px;
-  header {
-    font-weight: bold;
-  }
-  h1 {
+  .title {
     font-size: 150%;
     margin: 0 0 15px;
+    text-align: center;
   }
   .modal-close {
     color: #aaa;
@@ -55,27 +54,38 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  p {
+  .name {
     margin: 20px;
   }
 `;
 
-const Modal = ({ user, isOpen, onCloseModal }) => {
-  if (!isOpen) {
+const Modal = ({ drawedMember }) => {
+  const { avatar, name } = drawedMember;
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onCloseModal = useCallback(
+    () => setIsOpenModal(false),
+    [setIsOpenModal]
+  );
+  useEffect(() => {
+    if (drawedMember?.id > 0) {
+      setIsOpenModal(true);
+    }
+  }, [drawedMember]);
+
+  if (!isOpenModal) {
     return <></>;
   }
-
-  const { avatar, name } = user;
   return (
     <ModalWrapper>
       <ModalCardWrapper>
         <p className="modal-close" onClick={onCloseModal}>
           關閉
         </p>
-        <h1>抽獎結果</h1>
+        <h1 className="title">抽獎結果</h1>
         <ContentWrapper>
           <img src={avatar} />
-          <p>{name}</p>
+          <p className="name">{name}</p>
         </ContentWrapper>
       </ModalCardWrapper>
     </ModalWrapper>

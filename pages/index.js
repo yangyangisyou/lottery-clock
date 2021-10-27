@@ -10,10 +10,7 @@ const PageWrapper = styled.main`
   display: flex;
   justify-content: center;
   margin-top: 50px;
-  & .header {
-    font-weight: 500;
-    font-size: 24px;
-  }
+
   @media (max-width: 576px) {
     flex-direction: column;
     align-items: center;
@@ -22,55 +19,26 @@ const PageWrapper = styled.main`
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { seconds, userList, drawedMember } = useSelector(
-    (store) => store?.clock
+  const { userList, seconds, drawedMember } = useSelector(
+    (store) => store.clock
   );
-  const [currentMinute, setCurrentMinute] = useState(0);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const remainMinute = useMemo(
-    () =>
-      Math.floor(seconds / 60).toLocaleString("en-US", {
-        minimumIntegerDigits: 2,
-      }),
-    [seconds]
-  );
-  const remainSecond = useMemo(
-    () =>
-      (seconds % 60).toLocaleString("en-US", {
-        minimumIntegerDigits: 2,
-      }),
-    [seconds]
-  );
+
   const onSettingTimes = useCallback(
     (newSeconds) => {
       dispatch(setTimes(newSeconds));
     },
     [dispatch, setTimes]
   );
-  const onCloseModal = useCallback(
-    () => setIsOpenModal(false),
-    [setIsOpenModal]
-  );
-  useEffect(() => {
-    if (drawedMember?.id > 0) {
-      setIsOpenModal(true);
-    }
-  }, [drawedMember]);
+
+  const Menu = useMemo(() => {
+    return <MenuList list={userList} />;
+  }, [userList]);
+
   return (
     <PageWrapper>
-      <Form
-        currentMinute={currentMinute}
-        setCurrentMinute={setCurrentMinute}
-        onSettingTimes={onSettingTimes}
-        remainMinute={remainMinute}
-        remainSecond={remainSecond}
-      />
-      <MenuList list={userList} />
-      <Modal
-        user={drawedMember}
-        isOpen={isOpenModal}
-        onCloseModal={onCloseModal}
-      />
+      <Form seconds={seconds} onSettingTimes={onSettingTimes} />
+      {Menu}
+      <Modal seconds={seconds} drawedMember={drawedMember} />
     </PageWrapper>
   );
 };

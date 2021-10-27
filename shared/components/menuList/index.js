@@ -26,9 +26,9 @@ const CardWrapper = styled.li`
   justify-content: center;
   align-items: center;
   margin: 10px auto;
-  img {
+  .avatar {
     width: 25px;
-    & + p {
+    .name {
       margin-left: 10px;
     }
   }
@@ -41,8 +41,8 @@ const MenuList = ({ list }) => {
       <ListWrapper>
         {list.map(({ name, id, avatar }) => (
           <CardWrapper key={id}>
-            <img src={avatar} alt="avatar" />
-            <p>{name}</p>
+            <img className="avatar" src={avatar} alt="avatar" />
+            <p className="name">{name}</p>
           </CardWrapper>
         ))}
       </ListWrapper>

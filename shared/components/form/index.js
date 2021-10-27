@@ -1,9 +1,14 @@
+import { useCallback, useState, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
 
 const ContentWrapper = styled.div`
   margin: 20px;
   width: 40vw;
+  .header {
+    font-weight: 500;
+    font-size: 24px;
+  }
   @media (max-width: 576px) {
     width: 80vw;
   }
@@ -30,21 +35,38 @@ const TimerWrapper = styled.div`
   color: blue;
 `;
 
-const Form = ({
-  currentMinute,
-  setCurrentMinute,
-  onSettingTimes,
-  remainMinute,
-  remainSecond,
-}) => {
+const Form = ({ seconds, onSettingTimes }) => {
+  const [currentMinute, setCurrentMinute] = useState(0);
+  const onChangeSecond = useCallback(
+    (event) => setCurrentMinute(event.target.value),
+    [setCurrentMinute]
+  );
+  const onSubmit = useCallback(
+    () => onSettingTimes(currentMinute * 60),
+    [currentMinute]
+  );
+  const remainMinute = useMemo(
+    () =>
+      Math.floor(seconds / 60).toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+      }),
+    [seconds]
+  );
+  const remainSecond = useMemo(
+    () =>
+      (seconds % 60).toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+      }),
+    [seconds]
+  );
   return (
     <ContentWrapper>
       <p className="header">抽獎時間</p>
       <FlexWrapper>
         <InputField
-          type="text"
+          type="number"
           value={currentMinute}
-          onChange={(event) => setCurrentMinute(event.target.value)}
+          onChange={onChangeSecond}
         />
         <span
           className={css`
@@ -53,9 +75,7 @@ const Form = ({
         >
           分鐘
         </span>
-        <SubmitButton onClick={() => onSettingTimes(currentMinute * 60)}>
-          設定
-        </SubmitButton>
+        <SubmitButton onClick={onSubmit}>設定</SubmitButton>
       </FlexWrapper>
       <TimerWrapper>
         <span>{remainMinute}</span>:<span>{remainSecond}</span>
