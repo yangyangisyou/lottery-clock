@@ -61,7 +61,7 @@ const MenuList = ({ list, onLoadUsers, isLoadingUserList }) => {
         </>
       );
     }
-  }, []);
+  }, [isLoadingUserList, list]);
 
   return (
     <MenuWrapper>
