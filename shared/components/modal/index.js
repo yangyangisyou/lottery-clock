@@ -60,7 +60,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Modal = ({ drawedMember }) => {
-  const { avatar, name } = drawedMember;
+  const { name } = drawedMember;
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const onCloseModal = useCallback(
@@ -84,7 +84,7 @@ const Modal = ({ drawedMember }) => {
         </p>
         <h1 className="title">抽獎結果</h1>
         <ContentWrapper>
-          <img src={avatar} />
+          <img src="/user.png" />
           <p className="name">{name}</p>
         </ContentWrapper>
       </ModalCardWrapper>

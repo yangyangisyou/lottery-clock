@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { setTimes, loadUsers } from "../redux/actions/clock";
+import { setTimes, loadUsers, drawMember } from "../redux/actions/clock";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useMemo } from "react";
 import Form from "../shared/components/form";
 import MenuList from "../shared/components/menuList";
 import Modal from "../shared/components/modal";
@@ -19,20 +19,17 @@ const PageWrapper = styled.main`
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { userList, seconds, drawedMember, isLoadingUserList } = useSelector(
+  const { userList, drawedMember, isLoadingUserList } = useSelector(
     (store) => store.clock
   );
+
+  const onDrawUser = useCallback(() => {
+    dispatch(drawMember());
+  }, [dispatch, drawMember]);
 
   const onLoadUsers = useCallback(() => {
     dispatch(loadUsers());
   }, [dispatch, loadUsers]);
-
-  const onSettingTimes = useCallback(
-    (newSeconds) => {
-      dispatch(setTimes(newSeconds));
-    },
-    [dispatch, setTimes]
-  );
 
   const Menu = useMemo(() => {
     return (
@@ -46,9 +43,8 @@ const Home = () => {
 
   return (
     <PageWrapper>
-      <Form seconds={seconds} onSettingTimes={onSettingTimes} />
+      <Form drawedMember={drawedMember} onDrawUser={onDrawUser} />
       {Menu}
-      <Modal seconds={seconds} drawedMember={drawedMember} />
     </PageWrapper>
   );
 };
